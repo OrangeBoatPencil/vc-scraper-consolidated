@@ -1,0 +1,48 @@
+app = "vc-scraper-cron"
+primary_region = "ord"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  ENVIRONMENT = "production"
+  LOG_LEVEL = "INFO"
+  PYTHONPATH = "/app"
+
+# VC Portfolio scraping - daily at 6 AM UTC
+[[machine]]
+  schedule = "0 6 * * *"
+  command = "python scripts/scrape_vc_portfolio.py --all-sites"
+
+[machine]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"
+
+# Team scraping - weekly on Mondays at 7 AM UTC
+[[machine]]
+  schedule = "0 7 * * 1"
+  command = "python scripts/scrape_vc_teams.py --all-sites"
+
+[machine]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"
+
+# Fortune deals - every 4 hours
+[[machine]]
+  schedule = "0 */4 * * *"
+  command = "python scripts/scrape_fortune_deals.py"
+
+[machine]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"
+
+[metrics]
+  enabled = true
+  port = 9090
+
+[restart]
+  policy = "on-failure"
+  max_retries = 3

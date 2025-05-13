@@ -1,0 +1,49 @@
+## Core dependencies
+asyncio
+aiohttp>=3.9.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+html2text>=2020.1.16
+
+## Database
+supabase>=2.0.0
+psycopg2-binary>=2.9.0
+sqlalchemy>=2.0.0
+
+## Web scraping
+playwright>=1.40.0
+selenium>=4.15.0
+
+## Data processing
+pandas>=2.1.0
+numpy>=1.24.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+## Utilities
+python-dotenv>=1.0.0
+click>=8.1.0
+pyyaml>=6.0.0
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+## Monitoring and logging
+structlog>=23.2.0
+prometheus-client>=0.19.0
+sentry-sdk>=1.38.0
+
+## Networking
+httpx>=0.25.0
+certifi>=2023.11.0
+
+## For development
+black>=23.11.0
+isort>=5.12.0
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+
+## FastAPI for health checks
+fastapi>=0.104.0
+uvicorn>=0.24.0

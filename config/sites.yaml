@@ -1,0 +1,118 @@
+# Sample VC sites to scrape
+# Copy this to config/sites.yaml and customize with your target VC firms
+
+vc_sites:
+  - name: "Example Venture Capital"
+    url: "https://example-vc.com"
+    portfolio_url: "https://example-vc.com/portfolio"
+    team_url: "https://example-vc.com/team"
+    description: "Example VC firm for testing"
+    active: false  # Set to true when you want to scrape
+    
+  - name: "Another VC Firm"
+    url: "https://another-vc.com"
+    portfolio_url: "https://another-vc.com/companies"
+    team_url: "https://another-vc.com/people"
+    description: "Another example VC firm"
+    active: false
+    
+  # Add your actual VC firms here
+  # - name: "Accel"
+  #   url: "https://www.accel.com"
+  #   portfolio_url: "https://www.accel.com/companies"
+  #   team_url: "https://www.accel.com/people"
+  #   active: true
+  #
+  # - name: "Andreessen Horowitz"
+  #   url: "https://a16z.com"
+  #   portfolio_url: "https://a16z.com/portfolio/"
+  #   team_url: "https://a16z.com/team"
+  #   active: true
+
+# Scraping configuration
+scraping:
+  max_retries: 3
+  request_delay: 1.0  # Delay between requests in seconds
+  timeout: 30  # Request timeout in seconds
+  max_concurrent_requests: 5
+  user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  
+  # Site-specific configurations
+  site_configs:
+    "fortune.com":
+      request_delay: 2.0  # Slower for Fortune to avoid rate limiting
+      max_retries: 5
+      use_playwright: true  # Force browser for JS-heavy sites
+    
+    "linkedin.com":
+      request_delay: 3.0
+      use_playwright: true
+    
+    "github.com":
+      use_playwright: true
+
+# Database configuration
+database:
+  connection_pool_size: 10
+  query_timeout: 30
+  
+  # Schema configurations
+  tables:
+    sites:
+      enable_change_tracking: true
+      cleanup_days: 90
+    
+    portfolio_companies:
+      enable_change_tracking: true
+      cleanup_days: 90
+    
+    team_members:
+      enable_change_tracking: true
+      cleanup_days: 90
+    
+    fortune_deals:
+      enable_change_tracking: false
+      cleanup_days: 180
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  enable_json: true  # Structured logging for better analysis
+  enable_sentry: false  # Set to true and configure SENTRY_DSN for error tracking
+  
+  # File logging (optional)
+  file_logging:
+    enabled: false
+    path: "/var/log/vc-scraper"
+    max_size: "100MB"
+    backup_count: 5
+
+# Deployment configuration
+deployment:
+  environment: "production"  # production, staging, development
+  
+  # Fly.io specific settings
+  fly:
+    region: "ord"  # Chicago - change based on your preference
+    vm:
+      memory: "1gb"
+      cpu_kind: "shared"
+      cpus: 1
+    
+    # Scaling configuration
+    scaling:
+      min_machines: 0
+      max_machines: 3
+      auto_stop_timeout: "10m"
+  
+  # Monitoring and alerts
+  monitoring:
+    healthcheck_interval: 15  # seconds
+    healthcheck_timeout: 5    # seconds
+    enable_metrics: true
+    
+    # Define success/failure criteria
+    success_criteria:
+      min_companies_per_site: 5
+      max_error_rate: 0.1  # 10% error rate threshold

@@ -1,0 +1,91 @@
+# Logging configuration for VC Scraper
+
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  standard:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  
+  json:
+    class: 'lib.utils.logging_config.JSONFormatter'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  
+  detailed:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: json
+    stream: ext://sys.stdout
+  
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: detailed
+    filename: '/var/log/vc-scraper/app.log'
+    maxBytes: 100000000  # 100MB
+    backupCount: 5
+    encoding: utf-8
+  
+  error_file:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: detailed
+    filename: '/var/log/vc-scraper/error.log'
+    maxBytes: 50000000  # 50MB
+    backupCount: 5
+    encoding: utf-8
+
+loggers:
+  vc_scraper:
+    level: DEBUG
+    handlers: [console, file, error_file]
+    propagate: False
+  
+  vc_scraper.scrapers:
+    level: INFO
+    handlers: [console, file]
+    propagate: False
+  
+  vc_scraper.database:
+    level: INFO
+    handlers: [console, file]
+    propagate: False
+  
+  # Third-party libraries
+  supabase:
+    level: WARNING
+    handlers: [console]
+    propagate: False
+  
+  asyncio:
+    level: WARNING
+    handlers: [console]
+    propagate: False
+  
+  aiohttp:
+    level: WARNING
+    handlers: [console]
+    propagate: False
+
+root:
+  level: INFO
+  handlers: [console]
+
+# Custom configuration for structured logging
+structured_logging:
+  enabled: true
+  include_caller: true
+  include_thread: true
+  include_process: true
+  timestamp_format: 'iso'
+  
+  # Fields to include in all log messages
+  extra_fields:
+    service: 'vc-scraper'
+    version: '1.0.0'
