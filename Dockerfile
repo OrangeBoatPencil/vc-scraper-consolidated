@@ -85,4 +85,4 @@ RUN playwright install chromium
 EXPOSE 8080
 
 # Set default command (can be overridden in fly.toml)
-CMD ["python", "scripts/health_check.py"]
+CMD ["python", "main.py"]

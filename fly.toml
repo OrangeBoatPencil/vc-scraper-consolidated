@@ -1,4 +1,4 @@
-app = "vc-scraper"
+app = "vc-scraper-consolidated"
 primary_region = "ord"
 
 [build]
@@ -16,13 +16,6 @@ primary_region = "ord"
   auto_start_machines = true
   min_machines_running = 0
   max_concurrent_requests = 100
-
-[[services]]
-  protocol = "tcp"
-  internal_port = 8080
-  ports = [{ port = 80, handlers = ["http"] }, { port = 443, handlers = ["tls", "http"] }]
-  auto_stop_machines = true
-  auto_start_machines = true
 
 [metrics]
   enabled = true
@@ -45,3 +38,6 @@ primary_region = "ord"
 [restart]
   policy = "on-failure"
   max_retries = 3
+
+[deploy]
+  strategy = "immediate"
